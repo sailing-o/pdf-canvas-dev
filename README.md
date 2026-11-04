@@ -34,6 +34,13 @@ file_put_contents('invoice.pdf', $doc->render());
 composer require sailing-o/pdf-canvas
 ```
 
+Until the package is on Packagist, point Composer at the repository first:
+
+```sh
+composer config repositories.pdf-canvas vcs https://github.com/sailing-o/pdf-canvas-dev
+composer require sailing-o/pdf-canvas:^0.1
+```
+
 ## API (1.0 contract)
 
 Everything not listed here is `@internal` and may change.
