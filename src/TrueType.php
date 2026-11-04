@@ -181,17 +181,14 @@ final class TrueType
         $loca[] = strlen($glyf);
 
         // hmtx: metrics of dropped glyphs are zeroed (the PDF positions text with /W, and zeros compress away)
-        $hmtx = substr($this->data, $this->tables['hmtx'][0], $this->tables['hmtx'][1]);
-        $zero4 = "\0\0\0\0";
+        $src = substr($this->data, $this->tables['hmtx'][0], $this->tables['hmtx'][1]);
+        $parts = [];
         for ($g = 0; $g < $this->numGlyphs; $g++) {
-            if (isset($keep[$g])) continue;
-            if ($g < $this->numHMetrics) {
-                if (4 * $g + 4 <= strlen($hmtx)) $hmtx = substr_replace($hmtx, $zero4, 4 * $g, 4);
-            } else {
-                $p = 4 * $this->numHMetrics + 2 * ($g - $this->numHMetrics);
-                if ($p + 2 <= strlen($hmtx)) $hmtx = substr_replace($hmtx, "\0\0", $p, 2);
-            }
+            $size = $g < $this->numHMetrics ? 4 : 2;
+            $pos = $g < $this->numHMetrics ? 4 * $g : 4 * $this->numHMetrics + 2 * ($g - $this->numHMetrics);
+            $parts[] = isset($keep[$g]) ? substr($src, $pos, $size) : str_repeat("\0", $size);
         }
+        $hmtx = implode('', $parts);
 
         $tables = [];
         foreach (['cvt ', 'fpgm', 'prep', 'hhea', 'maxp', 'OS/2', 'name', 'post'] as $t) {
