@@ -1,0 +1,19 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: { php: ["8.2", "8.3", "8.4"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: "${{ matrix.php }}", extensions: "mbstring, zlib, gd", coverage: none }
+      - name: Ghostscript (the render tests rasterize the PDFs)
+        run: sudo apt-get update && sudo apt-get install -y ghostscript
+      - run: composer install --no-interaction --no-progress
+      - run: vendor/bin/phpunit
+      - name: Library code must not mention a host product
+        run: "! grep -rliE 'admingen|laravel' src/ || (echo 'host-specific reference in src' && exit 1)"

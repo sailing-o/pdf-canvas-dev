@@ -1,0 +1,31 @@
+{
+    "name": "sailing-o/pdf-canvas",
+    "description": "Draw PDFs with coordinates: rectangles, lines, circles, images and text with embedded TrueType subsets (CJK included). No dependencies.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["pdf", "truetype", "font subset", "cjk", "japanese", "canvas"],
+    "require": {
+        "php": "^8.2",
+        "ext-mbstring": "*",
+        "ext-zlib": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "suggest": {
+        "ext-gd": "GIF / WebP images, and PNG files that cannot be embedded as is (interlaced, 16-bit, palette with alpha)"
+    },
+    "autoload": {
+        "psr-4": { "SailingO\\PdfCanvas\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "SailingO\\PdfCanvas\\Tests\\": "tests/" }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable"
+}
